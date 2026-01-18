@@ -1,18 +1,27 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import LoginModal from "../components/LoginModal";
+import { auth } from "../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export default function Home() {
   const navigate = useNavigate();
   const [joinRoomId, setJoinRoomId] = useState("");
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const createRoom = async () => {
-    console.log("Creating room...");
     const roomId = crypto.randomUUID();
-    console.log("Generated room ID:", roomId);
     setJoinRoomId(roomId);
     try {
       await navigator.clipboard.writeText(roomId);
-      console.log("Room ID copied to clipboard");
     } catch (error) {
       console.error("Failed to copy room ID:", error);
     }
@@ -20,13 +29,19 @@ export default function Home() {
 
   const joinRoom = () => {
     if (!joinRoomId.trim()) return alert("Please enter a room ID.");
-    navigate(`/room/${joinRoomId}/premeeting`);
+    navigate(`/room/${joinRoomId}`);
+  };
+
+  const openLogin = () => setIsLoginOpen(true);
+  const closeLogin = () => setIsLoginOpen(false);
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null);
   };
 
   return (
     <div className="w-screen h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
-
-      {/* Header */}
+      
       <header className="w-full flex justify-between items-center gap-4 px-4 py-3 bg-black/20 backdrop-blur-xl shadow-lg sticky top-0 z-20 border-b border-white/10">
         <div className="flex items-center gap-3">
           <div className="w-6 h-6 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
@@ -37,7 +52,6 @@ export default function Home() {
           </h1>
         </div>
 
- main
         <div>
           {user ? (
             <div className="flex items-center gap-2">
@@ -62,35 +76,15 @@ export default function Home() {
               Sign In
             </button>
           )}
-
-        <div className="w-full sm:w-auto">
-          <div className="text-white text-sm sm:text-base font-medium">
-            Video Call App
-          </div>
- main
         </div>
       </header>
 
-      {/* Animated Background */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 rounded-full filter blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full filter blur-3xl animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full filter blur-2xl animate-bounce"></div>
       </div>
 
-      {/* Floating Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-4 h-4 bg-cyan-400/60 rounded-full animate-bounce"></div>
-        <div className="absolute top-40 right-20 w-6 h-6 bg-blue-400/60 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-32 left-20 w-3 h-3 bg-purple-400/60 rounded-full animate-ping"></div>
-        <div className="absolute bottom-20 right-32 w-5 h-5 bg-pink-400/60 rounded-full animate-bounce"></div>
-        <div className="absolute top-60 left-1/3 w-2 h-2 bg-emerald-400/60 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-40 right-1/4 w-4 h-4 bg-yellow-400/60 rounded-full animate-ping"></div>
-      </div>
-
-      {/* Main Content */}
       <main className="flex flex-col items-center justify-center flex-1 gap-3 px-4 py-2 relative z-10 overflow-y-auto min-h-0">
-
         <div className="text-center space-y-1 max-w-2xl animate-fade-in">
           <h2 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-300 bg-clip-text text-transparent leading-tight">
             Video Meetings
@@ -104,7 +98,6 @@ export default function Home() {
           <div className="bg-white/10 backdrop-blur-xl rounded-xl p-3 border border-white/20 shadow-xl">
             <div className="flex flex-col gap-3">
               
-              {/* Create Meeting */}
               <div className="w-full">
                 <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                   <span className="w-4 h-4 bg-green-500 rounded text-xs flex items-center justify-center text-white">+</span>
@@ -138,13 +131,8 @@ export default function Home() {
                       </button>
                     </div>
                     <button
- main
                       onClick={() => navigate(`/room/${joinRoomId}`)}
                       className="w-full mt-1 py-1 bg-blue-600 text-white rounded text-xs font-bold"
-
-                      onClick={() => navigate(`/room/${joinRoomId}/premeeting`)}
-                      className="w-full mt-2 py-2 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all text-sm"
- main
                     >
                       Join
                     </button>
@@ -154,7 +142,6 @@ export default function Home() {
 
               <div className="h-px bg-white/20"></div>
 
-              {/* Join Meeting */}
               <div className="w-full">
                 <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                   <span className="w-4 h-4 bg-blue-500 rounded text-xs flex items-center justify-center text-white">→</span>
@@ -178,12 +165,11 @@ export default function Home() {
               </div>
 
             </div>
-
           </div>
         </div>
-
       </main>
 
+      <LoginModal isOpen={isLoginOpen} onClose={closeLogin} />
     </div>
   );
 }
