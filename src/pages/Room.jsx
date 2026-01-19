@@ -142,12 +142,12 @@ export default function Room() {
 
   useEffect(() => {
     if (!localStream) return;
-    
-    const serverUrl = import.meta.env.VITE_SOCKET_URL || "http://localhost:5001";
+
+    const serverUrl = import.meta.env.VITE_SOCKET_URL || "https://video-call-app-backend.onrender.com";
     socketRef.current = io(serverUrl);
-    
+
     socketRef.current.emit('join_room', {
-      roomId: roomId,
+      room_id: roomId,
       userName: 'User'
     });
     
