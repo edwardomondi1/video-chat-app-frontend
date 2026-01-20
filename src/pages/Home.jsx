@@ -30,7 +30,7 @@ export default function Home() {
 
   const joinRoom = () => {
     if (!joinRoomId.trim()) return alert("Please enter a room ID.");
-    navigate(`/room/${joinRoomId}`);
+    navigate(`/room/${joinRoomId}/premeeting`);
   };
 
   const openLogin = () => setIsLoginOpen(true);
@@ -133,7 +133,7 @@ export default function Home() {
                       </button>
                     </div>
                     <button
-                      onClick={() => navigate(`/room/${joinRoomId}`)}
+                      onClick={() => navigate(`/room/${joinRoomId}/premeeting`)}
                       className="w-full mt-1 py-1 bg-blue-600 text-white rounded text-xs font-bold"
                     >
                       Join

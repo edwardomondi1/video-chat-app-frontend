@@ -2,6 +2,9 @@
   publish = "dist"
   command = "npm run build"
 
+[build.environment]
+  VITE_SOCKET_URL = "https://video-call-app-backend.onrender.com"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

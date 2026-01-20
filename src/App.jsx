@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Room from "./pages/Room";
 import PreMeeting from "./components/PreMeeting";
+import "./App.css";
 
 export default function App() {
   return (

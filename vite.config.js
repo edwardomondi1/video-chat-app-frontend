@@ -1,27 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwind from '@tailwindcss/vite'  // <- THIS is correct for the new plugin
+import tailwind from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [react(), tailwind()],        // <- call the imported variable
+  plugins: [react(), tailwind()],
   server: {
+    port: 3000,
     proxy: {
       '/socket.io': {
         target: 'https://video-call-app-backend.onrender.com',
         changeOrigin: true,
         ws: true,
-        configure: (proxy, options) => {
-          proxy.on('error', (err, req, res) => {
-            console.log('proxy error', err);
-          });
-          proxy.on('proxyReq', (proxyReq, req, res) => {
-            console.log('Sending Request to the Target:', req.method, req.url);
-          });
-          proxy.on('proxyRes', (proxyRes, req, res) => {
-            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
-          });
-        },
       }
     }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
   }
 })
