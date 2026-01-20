@@ -1,8 +1,8 @@
-Video Chat App
+## Video Chat App
 
 A real-time video chat application built with a React frontend and a Python backend, using WebRTC for peer-to-peer video/audio streaming, WebSockets for signaling, and Firebase for authentication.
 
-🚀 Features
+## Features
 
 Real-time video & audio calls
 
@@ -14,7 +14,7 @@ Firebase authentication
 
 Responsive React UI
 
-🛠 Tech Stack
+## Tech Stack
 
 Frontend: React, Tailwind CSS, WebRTC, Firebase
 
@@ -22,7 +22,7 @@ Backend: Python, WebSockets (FastAPI / Flask)
 
 Tools: Git, GitHub, CI/CD
 
-⚙️ Setup
+## Setup
 git clone https://github.com/your-username/video-chat-app.git
 cd frontend && npm install && npm run dev
 cd backend && pip install -r requirements.txt && python main.py
